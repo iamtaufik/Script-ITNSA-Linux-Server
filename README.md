@@ -1,5 +1,5 @@
 # Script-ITNSA-Linux-Server
-#NAT
+# NAT Masquerade
 	nano /etc/sysctl.conf
 	uncoment
 	net.ipv4.ip_forward=1
@@ -8,8 +8,7 @@
 	/sbin/iptables -t nat -nL
 	up command /sbin/iptables-restore < /etc/iptables/rules.v4 <<< Simpan di /etc/network/interfaces
 
-#DNS Server
-
+# DNS Server
 named.conf.default zones
 -> zone "example.com"
 		/db.domain;   ->db.domain
@@ -31,10 +30,7 @@ named.conf.default zones
 Angka terakhir IP yang diarahkan<- 2	IN	PTR	mail.example.com
 				<- 3	IN	PTR	ldap.example.com
 				<- 10	IN	PTR	example2.com  
-
- 
-#Load Balancing
-
+# Load Balancing
 upstream backend {
 	server 192.168.1.2;
 	server 192.168.1.6;
@@ -53,8 +49,7 @@ upstream backend {
 	}
 }
 
-#MariaDB
-
+# MariaDB
 mysql -u root -p
 create database dbwp;
 GRANT ALL PRIVILEGES ON dbwp.* TO "dbwp"@"localhost" IDENTIFIED BY "dbwp";
