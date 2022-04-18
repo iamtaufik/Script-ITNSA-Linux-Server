@@ -1,12 +1,35 @@
 # Script-ITNSA-Linux-Server
 # NAT Masquerade
-nano /etc/sysctl.conf
-uncoment
-net.ipv4.ip_forward=1
-apt install iptables-persistent -y
-/sbin/iptables -t nat -A POSTROUTING -o enp0s3 -j MASQUERADE
-/sbin/iptables -t nat -nL
-up command /sbin/iptables-restore < /etc/iptables/rules.v4 <<< Simpan di /etc/network/interfaces
+1. Aktifkan IP Forward dengan perintah berikut
+
+		nano /etc/sysctl.conf
+
+2. Kemudian uncoment pada baris kode berikut
+
+		net.ipv4.ip_forward=1
+	
+3. Install Package Iptables
+	
+		apt install iptables-persistent -y
+
+4. Ketikan Perintah Routing NAT berikut
+	
+		/sbin/iptables -t nat -A POSTROUTING -o enp0s3 -j MASQUERADE
+
+5. Check apakah sudah ada NAT
+
+		/sbin/iptables -t nat -nL
+		
+6. Save Konfigurasi IP Tables
+
+		/sbin/iptables-save > /etc/iptables/rules.v4
+
+7. Membuat Restore Point dengan cara Menambah command di interface jaringan 
+
+		nano /etc/network/interfaces
+		
+		up command /sbin/iptables-restore < /etc/iptables/rules.v4
+
 
 # DNS Server
 named.conf.default zones
