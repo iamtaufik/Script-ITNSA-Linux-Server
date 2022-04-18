@@ -1,5 +1,24 @@
 # Script-ITNSA-Linux-Server
-# NAT Masquerade
+# SSH Server
+1. Install Package SSH Server
+
+		apt install openssh
+
+2. Check Apakah sudah Running
+
+		systemctl status ssh
+
+# FTP Server
+1. Install Package FTP Server
+
+		apt install proftpd
+
+2. Check apakah FTP Server sudah running
+
+		systemctl status proftpd
+
+
+# NAT Masquerade (Server Side)
 1. Aktifkan IP Forward dengan perintah berikut
 
 		nano /etc/sysctl.conf
@@ -31,7 +50,7 @@
 		up command /sbin/iptables-restore < /etc/iptables/rules.v4
 
 
-# DNS Server
+# DNS Server (Server Side)
 1. Install Package bind9
 
 		apt install bind9
@@ -77,7 +96,7 @@ upstream backend {
 	}
 }
 
-# Web Server
+# Web Server (Client Side)
 
 chown -R www-data:www-data /var/www/html/wordpress
 
