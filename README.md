@@ -77,7 +77,12 @@ named.conf.default zones
 Angka terakhir IP yang diarahkan<- 2	IN	PTR	mail.example.com
 				<- 3	IN	PTR	ldap.example.com
 				<- 10	IN	PTR	example2.com  
-# Load Balancing
+# Load Balancing (Server Side)
+1. Install Package Nginx
+
+		apt install nginx
+
+
 upstream backend {
 	server 192.168.1.2;
 	server 192.168.1.6;
