@@ -4,7 +4,7 @@
 
 		apt install ssh
 
-2. Check Apakah sudah Running
+2. Check Apakah SSH Server sudah Running
 
 		systemctl status ssh
 
@@ -154,38 +154,63 @@
 15. Lakukan test ping kepada domain yang telah dibuat
 
 		ping example.lan
+
+16. Perintah untuk kembali ke direktori Home
+
+		cd $HOME
+
 # Load Balancing (Server Side)
 1. Install Package Nginx
 
 		apt install nginx
 
+2. Membuat file untuk menyimpan konfigurasi load balance
 
-upstream backend {
-	server 192.168.1.2;
-	server 192.168.1.6;
-	server 192.168.1.10;
-}
-	server {
-	listen 80;
-	listen [::]:80;
-	server_name example.com;
-	location /{
-		proxy_redirect off;
-		proxy_set_header X-Real-IP $remote_addr;
-		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-		proxy_set_header Host $http_host;
-		proxy_pass	http://backend;
-	}
-}
+		nano /etc/nginx/conf.d/load-balance.conf
 
+	Pastikan untuk ekstensi file .conf
+
+3. Menambahkan konfigurasi server block untuk load balancing
+
+		upstream backend {
+			server 192.168.1.2;
+			server 192.168.1.6;
+			server 192.168.1.10;
+		}
+			server {
+			listen 80;
+			listen [::]:80;
+			server_name example.com;
+			location /{
+				proxy_redirect off;
+				proxy_set_header X-Real-IP $remote_addr;
+				proxy_set_header X-Forwarded-For 	$proxy_add_x_forwarded_for;
+				proxy_set_header Host $http_host;
+				proxy_pass	http://backend;
+			}
+		}
+
+4. Restart service Nginx
+
+		systemctl restart nginx
+
+5. Check status Nginx
+
+		systemctl status nginx
+
+# Database Server
+
+1. Install Package MariaDB
+
+	
+
+mysql -u root -p
+create database dbwp;
+GRANT ALL PRIVILEGES ON dbwp.* TO "dbwp"@"localhost" IDENTIFIED BY "dbwp";
+exit;
 # Web Server (Client Side)
 
 chown -R www-data:www-data /var/www/html/wordpress
 
 
-# MariaDB
-mysql -u root -p
-create database dbwp;
-GRANT ALL PRIVILEGES ON dbwp.* TO "dbwp"@"localhost" IDENTIFIED BY "dbwp";
-exit;
 
