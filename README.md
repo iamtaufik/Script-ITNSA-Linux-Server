@@ -32,6 +32,11 @@
 
 
 # DNS Server
+1. Install Package bind9
+
+		apt install bind9
+
+
 named.conf.default zones
 -> zone "example.com"
 		/db.domain;   ->db.domain
