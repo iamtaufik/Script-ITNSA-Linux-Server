@@ -1,12 +1,12 @@
 # Script-ITNSA-Linux-Server
 # NAT Masquerade
-	nano /etc/sysctl.conf
-	uncoment
-	net.ipv4.ip_forward=1
-	apt install iptables-persistent -y
-	/sbin/iptables -t nat -A POSTROUTING -o enp0s3 -j MASQUERADE
-	/sbin/iptables -t nat -nL
-	up command /sbin/iptables-restore < /etc/iptables/rules.v4 <<< Simpan di /etc/network/interfaces
+nano /etc/sysctl.conf
+uncoment
+net.ipv4.ip_forward=1
+apt install iptables-persistent -y
+/sbin/iptables -t nat -A POSTROUTING -o enp0s3 -j MASQUERADE
+/sbin/iptables -t nat -nL
+up command /sbin/iptables-restore < /etc/iptables/rules.v4 <<< Simpan di /etc/network/interfaces
 
 # DNS Server
 named.conf.default zones
@@ -49,12 +49,14 @@ upstream backend {
 	}
 }
 
+# Web Server
+
+chown -R www-data:www-data /var/www/html/wordpress
+
+
 # MariaDB
 mysql -u root -p
 create database dbwp;
 GRANT ALL PRIVILEGES ON dbwp.* TO "dbwp"@"localhost" IDENTIFIED BY "dbwp";
 exit;
 
-#Web Server
-
-chown -R www-data:www-data /var/www/html/wordpress
