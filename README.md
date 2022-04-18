@@ -2,7 +2,7 @@
 # SSH Server
 1. Install Package SSH Server
 
-		apt install openssh
+		apt install ssh
 
 2. Check Apakah sudah Running
 
@@ -55,28 +55,105 @@
 
 		apt install bind9
 
+2. Masuk ke direktori bind dengan perintah
 
-named.conf.default zones
--> zone "example.com"
-		/db.domain;   ->db.domain
-				-> @	IN	NS	example.com
-				   @	IN	A	172.16.2.2->IP Debian
-				   @	IN	MX	2	mail.example.com -> Web Mail
-				   www	IN	A	192.168.1.2 -> IP Web Server
-				   mail	IN	A	192.168.1.2 -> IP Web Mail
-				   ldap	IN	A	192.168.1.3 -> IP LDAP Server	
--> zone "example2.com"
-		/db.domain2;  ->db.domain2
-				-> @	IN	NS	example2.com
-				   @	IN	A	192.168.1.10 -> IP Web Server
-				   www	IN	A	192.168.1.10
--> zone	"2.16.172.in.addr-arpa"
-		/db.IP	      ->db.IP
-			        -> @	IN	NS	example.com
-				<- 2	IN	PTR	example.com
-Angka terakhir IP yang diarahkan<- 2	IN	PTR	mail.example.com
-				<- 3	IN	PTR	ldap.example.com
-				<- 10	IN	PTR	example2.com  
+		cd /etc/bind/
+
+3. Ketikan perintah berikut untuk menampilkan semua isi dari dalam direktori bind
+
+		ls
+
+4. Kemudian copy file db.127 dan db.local dengan nama db.ip dan db.domain 
+
+		cp db.127 db.ip | cp db.local db.domain
+
+5. Konfigurasi file db.ip
+
+		nano db.ip
+
+6. Lalu replace localhost dengan nama domain yang ingin dipakai
+
+
+
+		; BIND reverse data file for local loopback interface
+		;
+		$TTL    604800
+		@       IN      SOA     example.lan. root.example.lan. (
+                              1         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+		;
+		@       IN      NS      example.lan.
+		2       IN      PTR     example.lan.
+	2 -> merupakan angka terakhir dari IP DNS Server (Alamat IP Server)
+
+7. Konfigurasi file db.domain
+
+		nano db.domain
+
+8.  Replace localhost dengan nama domain 
+
+
+		; BIND data file for local loopback interface
+		;
+		$TTL    604800
+		@       IN      SOA     example.lan. root.example.lan. (
+                              2         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+		;
+		@       IN      NS      example.lan.
+		@       IN      A       192.168.43.2
+
+		
+	Anda bisa menambahkan sub domain lainya Ex.
+
+		@       IN      MX      mail.example.lan
+		www     IN      A       192.168.3.2
+		mail    IN      A       192.168.3.3
+
+9. Konfigurasi file named.conf.default-zones
+
+		nano  named.conf.default-zones
+
+10. Replace localhost dengan nama domain
+
+		
+		zone "example.lan" {
+        type master;
+        file "/etc/bind/db.domain";
+		};
+
+		zone "43.168.192.in-addr.arpa" {
+        type master;
+        file "/etc/bind/db.ip";
+		};
+
+	Dan ubah path sesuai dengan konfigurasi yang sudah dibuat tadi. sesuaikan Alamat IP pada server (nb. Penulisan IP dari belakang ke depan)
+
+11. Restart Konfigurasi bind9
+
+		systemctl restart bind9
+
+12. Check apakah DNS Server sudah running
+
+		systemctl status bind9
+
+13. Setting nameserver
+
+		nano /etc/resolv.conf
+
+14. Tambahkan alamat DNS Server
+
+		nameserver 192.168.43.2
+
+15. Lakukan test ping kepada domain yang telah dibuat
+
+		ping example.lan
 # Load Balancing (Server Side)
 1. Install Package Nginx
 
