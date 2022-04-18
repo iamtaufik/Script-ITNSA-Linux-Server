@@ -202,15 +202,37 @@
 
 1. Install Package MariaDB
 
-	
+		apt install mariadb-server
 
-mysql -u root -p
-create database dbwp;
-GRANT ALL PRIVILEGES ON dbwp.* TO "dbwp"@"localhost" IDENTIFIED BY "dbwp";
-exit;
-# Web Server (Client Side)
+2. Masuk ke Mariadb 
+
+		mysql -u root -p
+
+3. Membuat database baru dengan nama dbwp
+
+		create database dbwp;
+
+4. Berikan hak akses database
+
+		GRANT ALL PRIVILEGES ON dbwp.* TO "dbwp"@"localhost" IDENTIFIED BY "dbwp";
+
+5. Keluar dari MariaDB
+
+		exit;
+
+# Setup CMS (Client Side)
+
+1. Install package web server Nginx
+
+		apt install nginx
 
 chown -R www-data:www-data /var/www/html/wordpress
 
+# Setup Postfix
 
+1. Install package Postfix
+
+		apt install postfix
+
+# Setup Web Mail
 
