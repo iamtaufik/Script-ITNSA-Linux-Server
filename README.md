@@ -226,7 +226,100 @@
 
 		apt install nginx
 
-chown -R www-data:www-data /var/www/html/wordpress
+2. Install utility PHP7.3
+
+		apt install php7.3 php7.3-fpm php7.3-cgi php7.3-mysql
+
+3. Delete Apache Server
+
+		apt remove apache2
+
+4. Ekstrak CMS Wordpress
+
+		unzip wordpress.zip
+
+5. Move wordpres ke direktori /var/www/
+
+		mv wordpress /var/www/wordpress
+
+6. Konfigurasi Nginx
+
+		nano /etc/nginx/sites-available/default
+
+7. Ubah path agar Web Server mengakses direktori wordpress
+
+		root /var/www/wordpress;
+
+8. Tambahkan index.php 
+
+		 index index.php index.html index.htm index.nginx-debian.html;
+
+9. Ganti server name dengan alamat domain
+
+		server_name example.lan;
+
+10. Tambahkan command berikut agar semua aktivitas Wordpres tercatat
+
+		access_log /var/log/nginx/wordpress_access.log;
+        error_log /var/log/nginx/wordpress_error.log;
+
+11. Uncomment pada bagian berikut
+
+		location ~ \.php$ {
+                include snippets/fastcgi-php.conf;
+        #
+        #       # With php-fpm (or other unix sockets):
+                fastcgi_pass unix:/run/php/php7.3-fpm.sock;
+        #       # With php-cgi (or other tcp sockets):
+        #       fastcgi_pass 127.0.0.0.1:9000;
+        }
+
+12. Masuk ke direktori wordpress
+
+		cd /var/www/wordpress
+
+13. Replace file wp-config-sample.php menjadi wp-config.php
+
+		cp  wp-config-sample.php  wp-config.php
+
+14. Edit file  wp-config.php
+
+		nano  wp-config.php
+
+15. Konfigurasikan Database
+
+		// ** MySQL settings - You can get this info from your web host ** //
+		/** The name of the database for WordPress */
+		define( 'DB_NAME', 'dbwp' );
+
+		/** MySQL database username */
+		define( 'DB_USER', 'dbwp' );
+
+		/** MySQL database password */
+		define( 'DB_PASSWORD', 'dbwp' );
+
+		/** MySQL hostname */
+		define( 'DB_HOST', 'localhost' );
+
+		/** Database Charset to use in creating database tables. */
+		define( 'DB_CHARSET', 'utf8' );
+
+		/** The Database Collate type. Don't change this if in doubt. */
+		define( 'DB_COLLATE', '' );
+	
+15. Ubah user dan group wordpress ke www-data
+
+		chown -R www-data:www-data /var/www/html/wordpress
+
+17. Ubah hak akses direktori wordpress
+
+		chmod 755 -R /var/www/wordpress
+
+18. Restart konfigurasi Web Server
+
+		systemctl restart nginx
+
+19. Check dengan cara mengakses domain Web Server pada Web Browser
 
 # Setup Postfix
 
