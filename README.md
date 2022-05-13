@@ -1,11 +1,42 @@
 # Script-ITNSA-Linux-Server
+# Konfigurasi Jaringan Ubuntu 20.04 Server
+1. Edit pada file berikut
+
+		nano /etc/netplan/00-installer-config.yaml
+
+2. Konfigurasi jaringan
+		
+		network:
+ 		  ethernets:
+ 		    enp0s3:
+		      dhcp4: false
+		      addresses: [192.168.43.20/24]
+		      gateway4: 192.168.43.1
+		    enp0s8:
+		      dhcp4: false
+ 		      addresses: [192.168.5.1/24]
+  		version: 2
+
+# Konfigurasi Name Server
+1. Edit pada file berikut
+
+		nano /etc/resolv.conf
+		
+2. Tambahkan nameserver berikut
+
+		nameserver 8.8.8.8
+
+3. Lakukan Update
+
+		apt-get update
+
 # SSH Server
 1. Install Package SSH Server
 
 		apt install ssh
 
 2. Check Apakah SSH Server sudah Running
-
+ 
 		systemctl status ssh
 
 # FTP Server
